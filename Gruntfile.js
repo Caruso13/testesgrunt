@@ -20,15 +20,76 @@ module.exports = function(grunt) {
             less: {
                 files: ['src/styles/**/*.less'],
                 tasks: ['less:development']
+            },
+            hteml: {
+                files: ['src/index.html'],
+                tasks: ['replace:dev']
             }
-        }
+        },
+        replace: {
+            dev: {
+                options: {
+                    partterns: [
+                        {
+                            match: 'EDERECO_DO_JS',
+                            replacement: './scc/scripts/main.js'
+                        },
+                        {
+                            match: 'EDERECO_DO_CSS',
+                            replacement: './styles/main.css'
+                        }
+                    ]
+                },
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['src/index.html'],
+                        dest: 'dev/'
+                    }
+                ]
+            },
+            dist: {
+                options: {
+                    partterns: [
+                        {
+                            match: 'EDERECO_DO_CSS',
+                            replacement: './styles/main.min.css'
+                        }
+                    ]
+                },
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['prebuild/index.html'],
+                        dest: 'dist/'
+                    }
+                ]
+            }
+        },
+        htmlmin: {
+            dist: {
+                options: {
+                    removeComents: true,
+                    collapseWhiteSpace: true
+                },
+                files: {
+                    'prebuild/index.html': 'src/index.html'
+                }
+            }
+        },
+        clean: ['prebuild']
 
     })
 
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-replace');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('build', ['less:production']);
+    grunt.registerTask('build', ['less:production', 'htmmin:dist', 'replace:dist', 'clean']);
 }
