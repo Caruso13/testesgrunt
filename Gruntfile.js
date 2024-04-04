@@ -21,7 +21,7 @@ module.exports = function(grunt) {
                 files: ['src/styles/**/*.less'],
                 tasks: ['less:development']
             },
-            hteml: {
+            html: {
                 files: ['src/index.html'],
                 tasks: ['replace:dev']
             }
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         replace: {
             dev: {
                 options: {
-                    partterns: [
+                    patterns: [
                         {
                             match: 'EDERECO_DO_JS',
                             replacement: './scc/scripts/main.js'
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 options: {
-                    partterns: [
+                    patterns: [
                         {
                             match: 'EDERECO_DO_CSS',
                             replacement: './styles/main.min.css'
@@ -71,8 +71,8 @@ module.exports = function(grunt) {
         htmlmin: {
             dist: {
                 options: {
-                    removeComents: true,
-                    collapseWhiteSpace: true
+                    removeComments: true,
+                    collapseWhitespace: true
                 },
                 files: {
                     'prebuild/index.html': 'src/index.html'
@@ -87,9 +87,7 @@ module.exports = function(grunt) {
                 }
             }
         }
-
-    })
-
+    });
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -100,4 +98,4 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('build', ['less:production', 'htmlmin:dist', 'replace:dist', 'clean', 'uglify']);
-}
+};
